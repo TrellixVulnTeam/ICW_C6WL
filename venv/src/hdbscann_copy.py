@@ -49,7 +49,7 @@ def generate_10_cluster_sample(n_points_per_cluster_total):
     C10 = [1, 9] + 2 * np.random.randn(n_points_per_cluster, 2)
     X = np.vstack((C1, C2, C3, C4, C5, C6, C7, C8, C9, C10))
     return X
-n_points_per_cluster_total = 2000000
+n_points_per_cluster_total = 10000
 X = generate_10_cluster_sample(n_points_per_cluster_total)
 #print(X)
 ##############################################################################
@@ -59,10 +59,10 @@ hdb = HDBSCAN(min_cluster_size=10).fit(X)
 hdb_labels = hdb.labels_
 hdb_elapsed_time = time.time() - hdb_t1
 
-# db_t1 = time.time()
-# db = DBSCAN(eps=0.1).fit(X)
-# db_labels = db.labels_
-# db_elapsed_time = time.time() - db_t1
+db_t1 = time.time()
+db = DBSCAN(eps=0.1).fit(X)
+db_labels = db.labels_
+db_elapsed_time = time.time() - db_t1
 
 # Number of clusters in labels, ignoring noise if present.
 n_clusters_hdb_ = len(set(hdb_labels)) - (1 if -1 in hdb_labels else 0)
@@ -81,12 +81,12 @@ print('Elapsed time to cluster: %.4f s' % hdb_elapsed_time)
 # print('Silhouette Coefficient: %0.3f'
 #       % metrics.silhouette_score(X, hdb_labels))
 
-# n_clusters_db_ = len(set(db_labels)) - (1 if -1 in db_labels else 0)
-#
-# print('\n\n++ DBSCAN Results')
-# print('Len of Cluster are : ', len(X))
-# print('Estimated number of clusters: %d' % n_clusters_db_)
-# print('Elapsed time to cluster: %.4f s' % db_elapsed_time)
+n_clusters_db_ = len(set(db_labels)) - (1 if -1 in db_labels else 0)
+
+print('\n\n++ DBSCAN Results')
+print('Len of Cluster are : ', len(X))
+print('Estimated number of clusters: %d' % n_clusters_db_)
+print('Elapsed time to cluster: %.4f s' % db_elapsed_time)
 # print('Homogeneity: %0.3f' % metrics.homogeneity_score(labels_true, db_labels))
 # print('Completeness: %0.3f' % metrics.completeness_score(labels_true, db_labels))
 # print('V-measure: %0.3f' % metrics.v_measure_score(labels_true, db_labels))
@@ -106,34 +106,33 @@ import matplotlib.pyplot as plt
 
 # Black removed and is used for noise instead.
 hdb_unique_labels = set(hdb_labels)
-#db_unique_labels = set(db_labels)
+db_unique_labels = set(db_labels)
 hdb_colors = plt.cm.Spectral(np.linspace(0, 1, len(hdb_unique_labels)))
-#db_colors = plt.cm.Spectral(np.linspace(0, 1, len(db_unique_labels)))
-# fig = plt.figure(figsize=plt.figaspect(0.5))
-# hdb_axis = fig.add_subplot('121')
-# db_axis = fig.add_subplot('122')
+db_colors = plt.cm.Spectral(np.linspace(0, 1, len(db_unique_labels)))
+fig = plt.figure(figsize=plt.figaspect(0.5))
+hdb_axis = fig.add_subplot('121')
+db_axis = fig.add_subplot('122')
 for k, col in zip(hdb_unique_labels, hdb_colors):
     if k == -1:
         # Black used for noise.
         col = 'k'
 
-    plt.plot(X[hdb_labels == k, 0], X[hdb_labels == k, 1], 'o', markerfacecolor=col,
+    hdb_axis.plot(X[hdb_labels == k, 0], X[hdb_labels == k, 1], 'o', markerfacecolor=col,
                   markeredgecolor='k', markersize=6)
-# for k, col in zip(db_unique_labels, db_colors):
-#     if k == -1:
-#         # Black used for noise.
-#         col = 'k'
-#
-#     db_axis.plot(X[db_labels == k, 0], X[db_labels == k, 1], 'o', markerfacecolor=col,
-#                  markeredgecolor='k', markersize=6)
+for k, col in zip(db_unique_labels, db_colors):
+    if k == -1:
+        # Black used for noise.
+        col = 'k'
+
+    db_axis.plot(X[db_labels == k, 0], X[db_labels == k, 1], 'o', markerfacecolor=col,
+                 markeredgecolor='k', markersize=6)
 
 #hdb_axis.set_title('HDBSCAN\nEstimated number of clusters: %d' % n_clusters_hdb_)
-#db_axis.set_title('DBSCAN\nEstimated number of clusters: %d' % n_clusters_db_)
-plt.xlabel('Achse X')
-plt.ylabel('Achse Y')
-plt.title('Number of clusters: %d' % n_clusters_hdb_ +
+db_axis.set_title('DBSCAN\nEstimated number of clusters: %d' % n_clusters_db_)
+
+hdb_axis.set_title('Number of clusters: %d' % n_clusters_hdb_ +
             " ,The total point are: %d" % n_points_per_cluster_total +
             "\n Elapsed time to cluster:  %.4f s" % hdb_elapsed_time )
-plt.grid(True)
+hdb_axis.grid(True)
 plt.savefig('praxis/Hdbscan_%d'%n_points_per_cluster_total+'.png')
 plt.show()
