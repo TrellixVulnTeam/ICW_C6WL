@@ -2,43 +2,37 @@ print(__doc__)
 
 import numpy as np
 import time
+import datetime
 
 from sklearn.cluster import DBSCAN
 from sklearn import metrics
 from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
-
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+#make the random number is same every each run
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+from scipy.spatial import distance
+np.random.seed(0)
 # #############################################################################
 # Generate sample data
-def generate_data_sample(length_vector,size_colum, low, high):
-    return np.random.uniform(low, high, size = (length_vector, size_colum))
-#X = generate_data_sample(10000, 2, -10, 10)
-def generate_10_cluster_sample(n_points_per_cluster_total):
-    n_points_per_cluster = int(n_points_per_cluster_total / 10)
-    C1 = [-5, -2 ] + .8 * np.random.randn(n_points_per_cluster, 2)
-    C2 = [1, -1 ] + .1 * np.random.randn(n_points_per_cluster, 2)
-    C3 = [1, -2] + .2 * np.random.randn(n_points_per_cluster, 2)
-    C4 = [-2, 3] + .3 * np.random.randn(n_points_per_cluster, 2)
-    C5 = [3, -2] + 1.6 * np.random.randn(n_points_per_cluster, 2)
-    C6 = [5, 6] + 2 * np.random.randn(n_points_per_cluster, 2)
-    C7 = [1, 6] + 2 * np.random.randn(n_points_per_cluster, 2)
-    C8 = [5, -3] + 2 * np.random.randn(n_points_per_cluster, 2)
-    C9 = [1, -2] + 2 * np.random.randn(n_points_per_cluster, 2)
-    C10 = [1, 9] + 2 * np.random.randn(n_points_per_cluster, 2)
-    X = np.vstack((C1, C2, C3, C4, C5, C6, C7, C8, C9, C10))
-    return X
-
-#dataset_sizes = np.hstack([np.arange(1, 6) * 500, np.arange(3,7) * 1000, np.arange(4,17) * 2000])
-#print(dataset_sizes)
-
 n_points_per_cluster_total = 1000
-X = generate_10_cluster_sample(n_points_per_cluster_total)
-#print(X)
-#print('Length of cluster:',len(X))
+size_colum = 100
+centers = np.random.randint(-100, 100, size=(size_colum,size_colum))
+print(centers.shape)
+X, labels_true = make_blobs(n_samples=n_points_per_cluster_total,
+                            centers=centers, center_box=(-100.0, 100.0),
+                            n_features=size_colum, cluster_std=0.4,
+                            random_state=0)
+X = StandardScaler().fit_transform(X)
+print(X)
 # #############################################################################
 # Compute DBSCAN
 db_time = time.time()
-db = DBSCAN(eps=0.5, min_samples=5).fit(X)
+epsilon  = 12
+min_samples = 10
+db = DBSCAN(eps=epsilon, min_samples=min_samples).fit(X)
 #array false for core samples mask
 core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
 #set for db.core sample indices as true
@@ -55,13 +49,21 @@ print('The total point are  %d' % n_points_per_cluster_total)
 print('Elapsed time to cluster in DBSCANN :  %.4f s ' % db_time_process)
 # #############################################################################
 # Plot result
-import matplotlib.pyplot as plt
-
 # Black removed and is used for noise instead.
 unique_labels = set(labels)
 colors = [plt.cm.Spectral(each)
           for each in np.linspace(0, 1, len(unique_labels))]
 
+#change to 3 dimension in PCA
+#pca = PCA(n_components=3)
+#data_set_then = pca.fit_transform(X)
+#change data set to 3 dimension with TSNE
+data_set_then = TSNE(n_components=3).fit_transform(X)
+
+fig = plt.figure(figsize=(12, 12))
+ax = plt.axes(projection='3d')
+#ax.view_init(60, 35)
+#for data in order to plot
 for k, col in zip(unique_labels, colors):
     if k == -1:
         # Black used for noise.
@@ -69,19 +71,23 @@ for k, col in zip(unique_labels, colors):
     # true false array
     class_member_mask = (labels == k)
 # plot for cluster
-    xy = X[class_member_mask & core_samples_mask]
-    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
+    #xy = X[class_member_mask & core_samples_mask]
+    xy = data_set_then[class_member_mask & core_samples_mask]
+    ax.plot3D(xy[:, 0], xy[:, 1], xy[:, 2],  'o', markerfacecolor=tuple(col),
              markeredgecolor='k', markersize=14)
+    #plt.plot(xy[:, 0], xy[:, 1])
+
 #the graph for noise point
     xy = X[class_member_mask & ~core_samples_mask]
-    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
+
+    plt.plot(xy[:, 0], xy[:, 1], xy[:, 2], 'o', markerfacecolor=tuple(col),
              markeredgecolor='k', markersize=6)
 
-plt.xlabel('Achse X')
-plt.ylabel('Achse Y')
+plt.xlabel(str(datetime.timedelta(seconds=round(db_time_process,4), )) + ' s')
+plt.ylabel('Epsilon:'+ str(epsilon) +',mini_samples:'+str(min_samples))
 plt.title('Number of clusters: %d' % n_clusters_ +
-            " ,The total point are: %d" % n_points_per_cluster_total +
-            "\n Elapsed time to cluster:  %.4f s" % db_time_process )
+            " Total point are: %d" % n_points_per_cluster_total +
+            "\n Size of colum is %d" % size_colum )
 plt.grid(True)
 plt.savefig('praxis/dbscan_%d'%n_points_per_cluster_total+'.png')
 plt.show()
