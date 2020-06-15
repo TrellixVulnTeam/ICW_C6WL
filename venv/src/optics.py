@@ -28,15 +28,15 @@ np.random.seed(0)
 n_points_per_cluster_total = 1000
 size_colum = 100
 centers = np.random.randint(-100, 100, size=(size_colum,size_colum))
-print(centers[0])
+print(n_points_per_cluster_total)
 X, labels_true = make_blobs(n_samples=n_points_per_cluster_total,centers=centers,
                             n_features=size_colum, cluster_std=0.4, random_state=0)
 X = StandardScaler().fit_transform(X)
-print(X.shape)
+print(X)
 
 #handle optics algorithm
 op_time = time.time()
-clust = OPTICS(min_samples=1, xi=.05, min_cluster_size=.05).fit(X)
+clust = OPTICS(min_samples=200, xi=.05, min_cluster_size=.05, n_jobs=-1).fit(X)
 space = np.arange(len(X))
 reachability = clust.reachability_[clust.ordering_]
 labels = clust.labels_[clust.ordering_]
@@ -64,7 +64,7 @@ for klass, color in zip(range(0, 5), colors):
     # old ax.plot3D(Xk[:, 0], Xk[:, 1],Xk[:, 2], color, alpha=0.3)
 
     ax.plot3D(data_set_then[clust.labels_ == -1, 0], data_set_then[clust.labels_ == -1, 1],
-          data_set_then[clust.labels_ == -1, 2], 'k+', alpha=0.1)
+          data_set_then[clust.labels_ == -1, 2], 'k+', alpha=0.3)
 
     #ax.plot(Xk[:, 0], Xk[:, 1], color, alpha=0.3, marker='.')
     #ax.plot(X[clust.labels_ == -1, 0], X[clust.labels_ == -1, 1], 'k+', alpha=0.1)

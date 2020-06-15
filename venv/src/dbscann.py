@@ -17,10 +17,10 @@ from scipy.spatial import distance
 np.random.seed(0)
 # #############################################################################
 # Generate sample data
-n_points_per_cluster_total = 1000
+n_points_per_cluster_total = 500000
 size_colum = 100
 centers = np.random.randint(-100, 100, size=(size_colum,size_colum))
-print(centers.shape)
+print(n_points_per_cluster_total)
 X, labels_true = make_blobs(n_samples=n_points_per_cluster_total,
                             centers=centers, center_box=(-100.0, 100.0),
                             n_features=size_colum, cluster_std=0.4,
@@ -30,7 +30,8 @@ print(X)
 # #############################################################################
 # Compute DBSCAN
 db_time = time.time()
-epsilon  = 12
+epsilon  = 14
+print(epsilon)
 min_samples = 10
 db = DBSCAN(eps=epsilon, min_samples=min_samples).fit(X)
 #array false for core samples mask

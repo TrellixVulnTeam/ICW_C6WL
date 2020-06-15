@@ -37,7 +37,7 @@ np.random.seed(0)
 
 #############################################################################
 # Generate Date Set
-n_points_per_cluster_total = 1000
+n_points_per_cluster_total = 50000
 size_colum = 100
 centers = np.random.randint(-100, 100, size=(size_colum,size_colum))
 
