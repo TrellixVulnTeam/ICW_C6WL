@@ -18,21 +18,27 @@ np.random.seed(0)
 # #############################################################################
 # Generate sample data
 n_points_per_cluster_total = 1000000
+print("total points")
+print(n_points_per_cluster_total)
+
 size_colum = 100
 centers = np.random.randint(-100, 100, size=(size_colum,size_colum))
-print(centers)
+
 X, labels_true = make_blobs(n_samples=n_points_per_cluster_total,
                             centers=centers, center_box=(-100.0, 100.0),
                             n_features=size_colum, cluster_std=0.4,
                             random_state=0)
 X = StandardScaler().fit_transform(X)
-print(X)
+print(X.shape)
 # #############################################################################
 # Compute DBSCAN
 db_time = time.time()
 epsilon  = 12
+print("epsilon")
 print( epsilon)
 min_samples = 10
+print("min_samples")
+print( min_samples)
 db = DBSCAN(eps=epsilon,algorithm='ball_tree', min_samples=min_samples, n_jobs = -1).fit(X)
 #array false for core samples mask
 core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
