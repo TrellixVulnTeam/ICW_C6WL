@@ -41,14 +41,13 @@ n_points_per_cluster_total = 500000
 size_colum = 100
 centers = np.random.randint(-100, 100, size=(size_colum,size_colum))
 
-X, labels_true = make_blobs(n_samples=n_points_per_cluster_total,centers=centers,
-                            n_features=size_colum, cluster_std=0.4, random_state=0)
+X, labels_true = make_blobs(n_samples=n_points_per_cluster_total,centers=centers, n_features=size_colum, cluster_std=0.4, random_state=0)
 print(X.shape)
 
 ##############################################################################
 # Compute HDBSCAN
 hdb_t1 = time.time()
-hdb = HDBSCAN(min_cluster_size=10).fit(X)
+hdb = HDBSCAN(min_cluster_size=800).fit(X)
 hdb_labels = hdb.labels_
 hdb_elapsed_time = time.time() - hdb_t1
 

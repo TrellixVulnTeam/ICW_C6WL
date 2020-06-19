@@ -24,19 +24,17 @@ np.random.seed(0)
 # n_points_per_cluster_total = 50000
 # size_colum = 300
 # X = generate_10_cluster_sample_random(n_points_per_cluster_total, size_colum
-
-n_points_per_cluster_total = 1000
+n_points_per_cluster_total = 250
 size_colum = 100
 centers = np.random.randint(-100, 100, size=(size_colum,size_colum))
-print(n_points_per_cluster_total)
+
 X, labels_true = make_blobs(n_samples=n_points_per_cluster_total,centers=centers,
                             n_features=size_colum, cluster_std=0.4, random_state=0)
 X = StandardScaler().fit_transform(X)
-print(X)
 
 #handle optics algorithm
 op_time = time.time()
-clust = OPTICS(min_samples=200, xi=.05, min_cluster_size=.05, n_jobs=-1).fit(X)
+clust = OPTICS(min_samples=2, xi=.05, min_cluster_size=.05).fit(X)
 space = np.arange(len(X))
 reachability = clust.reachability_[clust.ordering_]
 labels = clust.labels_[clust.ordering_]
