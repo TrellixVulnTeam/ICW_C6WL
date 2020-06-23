@@ -37,7 +37,7 @@ np.random.seed(0)
 
 #############################################################################
 # Generate Date Set
-n_points_per_cluster_total = 500000
+n_points_per_cluster_total = 4000000
 size_colum = 100
 centers = np.random.randint(-100, 100, size=(size_colum,size_colum))
 
@@ -47,7 +47,8 @@ print(X.shape)
 ##############################################################################
 # Compute HDBSCAN
 hdb_t1 = time.time()
-hdb = HDBSCAN(min_cluster_size=800).fit(X)
+min_cluster_size = 10
+hdb = HDBSCAN(min_cluster_size=min_cluster_size, algorithm='boruvka_kdtree', core_dist_n_jobs=-1, ).fit(X)
 hdb_labels = hdb.labels_
 hdb_elapsed_time = time.time() - hdb_t1
 
@@ -60,26 +61,26 @@ print('Elapsed time to cluster: %.4f s' % hdb_elapsed_time)
 # Plot result
 import matplotlib.pyplot as plt
 
-# Black removed and is used for noise instead.
-hdb_unique_labels = set(hdb_labels)
-hdb_colors = plt.cm.Spectral(np.linspace(0, 1, len(hdb_unique_labels)))
-fig = plt.figure()
-ax = plt.axes(projection='3d')
-pca = PCA(3)
-projected = pca.fit_transform(X)
-
-for k, col in zip(hdb_unique_labels, hdb_colors):
-    if k == -1:
-        # Black used for noise.
-        col = 'k'
-    ax.plot3D(projected[hdb_labels == k, 0], X[hdb_labels == k, 1],X[hdb_labels == k, 2], 'o', markerfacecolor=col,
-                  markeredgecolor='k', markersize=6)
-
-plt.xlabel(str(datetime.timedelta(seconds=round(hdb_elapsed_time,4), )) + ' s')
-plt.ylabel('Achse Y')
-plt.title('Number of clusters: %d' % n_clusters_hdb_ +
-            "\n The total point are: %d" % n_points_per_cluster_total +
-            "\n Size of colum is %d" % size_colum )
-plt.grid(True)
-plt.savefig('praxis/hdbscan_%d'%n_points_per_cluster_total+'.png')
-plt.show()
+# # Black removed and is used for noise instead.
+# hdb_unique_labels = set(hdb_labels)
+# hdb_colors = plt.cm.Spectral(np.linspace(0, 1, len(hdb_unique_labels)))
+# fig = plt.figure()
+# ax = plt.axes(projection='3d')
+# pca = PCA(3)
+# projected = pca.fit_transform(X)
+#
+# for k, col in zip(hdb_unique_labels, hdb_colors):
+#     if k == -1:
+#         # Black used for noise.
+#         col = 'k'
+#     ax.plot3D(projected[hdb_labels == k, 0], X[hdb_labels == k, 1],X[hdb_labels == k, 2], 'o', markerfacecolor=col,
+#                   markeredgecolor='k', markersize=6)
+#
+# plt.xlabel(str(datetime.timedelta(seconds=round(hdb_elapsed_time,4), )) + ' s')
+# plt.ylabel('Achse Y')
+# plt.title('Number of clusters: %d' % n_clusters_hdb_ +
+#             "\n The total point are: %d" % n_points_per_cluster_total +
+#             "\n Size of colum is %d" % size_colum )
+# plt.grid(True)
+# plt.savefig('praxis/hdbscan_%d'%n_points_per_cluster_total+'.png')
+# plt.show()
