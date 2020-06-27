@@ -48,21 +48,8 @@ if __name__ == "__main__":
         .appName("Hdbscann")\
         .getOrCreate()
 
-    # # $example on$
-    # df = spark.createDataFrame([
-    #     (0, 1, 1.0),
-    #     (0, 2, 1.0),
-    #     (1, 2, 1.0),
-    #     (3, 4, 1.0),
-    #     (4, 0, 0.1)
-    # ], ["src", "dst", "weight"])
 
-    #pic = PowerIterationClustering(k=2, maxIter=20, initMode="degree", weightCol="weight")
-
-    # Shows the cluster assignment
-    #pic.assignClusters(df).show()
-    # $example off$
-    n_points_per_cluster_total = 100000
+    n_points_per_cluster_total = 2000000
     print("total points: " + str(n_points_per_cluster_total))
 
     size_colum = 100
@@ -79,7 +66,7 @@ if __name__ == "__main__":
     hdb_t1 = time.time()
     min_cluster_size  = 10
     print("min_cluster_size : " + str(min_cluster_size))
-    hdb = HDBSCAN(min_cluster_size=min_cluster_size, algorithm='prims_balltree', core_dist_n_jobs=-1, ).fit(X)
+    hdb = HDBSCAN(min_cluster_size=min_cluster_size, algorithm='boruvka_kdtree', core_dist_n_jobs=-1, ).fit(X)
     hdb_labels = hdb.labels_
     hdb_elapsed_time = time.time() - hdb_t1
 

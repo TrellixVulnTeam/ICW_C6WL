@@ -17,7 +17,7 @@ from scipy.spatial import distance
 np.random.seed(0)
 # #############################################################################
 # Generate sample data
-n_points_per_cluster_total = 1000000
+n_points_per_cluster_total = 50000
 print("total points")
 print(n_points_per_cluster_total)
 
@@ -29,7 +29,8 @@ X, labels_true = make_blobs(n_samples=n_points_per_cluster_total,
                             n_features=size_colum, cluster_std=0.4,
                             random_state=0)
 X = StandardScaler().fit_transform(X)
-print(X.shape)
+print(X)
+
 # #############################################################################
 # Compute DBSCAN
 db_time = time.time()

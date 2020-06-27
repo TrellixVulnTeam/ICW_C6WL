@@ -16,52 +16,43 @@
 #
 
 """
-An example demonstrating PowerIterationClustering.
+An example demonstrating k-means clustering.
 Run with:
-  bin/spark-submit examples/src/main/python/ml/power_iteration_clustering_example.py
-"""
-# $example on$
-from pyspark.ml.clustering import PowerIterationClustering
-# $example off$
-from pyspark.sql import SparkSession
+  bin/spark-submit examples/src/main/python/ml/kmeans_example.py
 
+This example requires NumPy (http://www.numpy.org/).
+"""
+from __future__ import print_function
 import numpy as np
 import time
 import datetime
 
 from sklearn.cluster import DBSCAN
+from sklearn import metrics
 from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
-from sklearn import metrics
 from sklearn.decomposition import PCA
 #make the random number is same every each run
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from scipy.spatial import distance
-np.random.seed(0)
+import csv
+
+# $example on$
+from pyspark.ml.clustering import KMeans
+from pyspark.ml.evaluation import ClusteringEvaluator
+# $example off$
+
+from pyspark.sql import SparkSession
+from pyspark import SparkContext, SparkConf
 if __name__ == "__main__":
-    spark = SparkSession\
-        .builder\
-        .appName("dbscann")\
-        .getOrCreate()
+    conf = SparkConf().setAppName("KMeansExample")
+    sc = SparkContext(conf=conf)
 
-    # # $example on$
-    # df = spark.createDataFrame([
-    #     (0, 1, 1.0),
-    #     (0, 2, 1.0),
-    #     (1, 2, 1.0),
-    #     (3, 4, 1.0),
-    #     (4, 0, 0.1)
-    # ], ["src", "dst", "weight"])
-
-    #pic = PowerIterationClustering(k=2, maxIter=20, initMode="degree", weightCol="weight")
-
-    # Shows the cluster assignment
-    #pic.assignClusters(df).show()
-    # $example off$
     n_points_per_cluster_total = 100000
-    print("total points: " + str(n_points_per_cluster_total))
+    print("total points")
+    print(n_points_per_cluster_total)
 
     size_colum = 100
     centers = np.random.randint(-100, 100, size=(size_colum, size_colum))
@@ -71,16 +62,18 @@ if __name__ == "__main__":
                                 n_features=size_colum, cluster_std=0.4,
                                 random_state=0)
     X = StandardScaler().fit_transform(X)
-    print("X.shape: " + str(X.shape))
-    # #############################################################################
+    # read data with method 1, Parallelized Collections
+    #https://spark.apache.org/docs/latest/rdd-programming-guide.html
+    distData = sc.parallelize(X)
     # Compute DBSCAN
     db_time = time.time()
     epsilon = 12
-    print("epsilon: " + str(epsilon))
+    print("epsilon")
+    print(epsilon)
     min_samples = 10
-    print("min_samples: m" + str(min_samples))
-    db = DBSCAN(eps=epsilon, algorithm='brute', min_samples=min_samples, n_jobs=-1).fit(X)
-    # array false for core samples mask
+    print("min_samples")
+    print(min_samples)
+    db = DBSCAN(eps=epsilon, algorithm='ball_tree', min_samples=min_samples, n_jobs=-1).fit(X)
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     # set for db.core sample indices as true
     core_samples_mask[db.core_sample_indices_] = True
@@ -94,5 +87,5 @@ if __name__ == "__main__":
     print('Estimated number of noise points: %d' % n_noise_)
     print('The total point are  %d' % n_points_per_cluster_total)
     print('Elapsed time to cluster in DBSCANN :  %.4f s ' % db_time_process)
-    # #############################################################################
-    spark.stop()
+
+    sc.stop()
