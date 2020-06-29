@@ -14,10 +14,11 @@ from sklearn.decomposition import PCA
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from scipy.spatial import distance
+import Tree as tree
 np.random.seed(0)
 # #############################################################################
 # Generate sample data
-n_points_per_cluster_total = 50000
+n_points_per_cluster_total = 1000
 print("total points")
 print(n_points_per_cluster_total)
 
@@ -34,12 +35,13 @@ print(X)
 # #############################################################################
 # Compute DBSCAN
 db_time = time.time()
-epsilon  = 12
+epsilon  = 13
 print("epsilon")
 print( epsilon)
 min_samples = 10
 print("min_samples")
 print( min_samples)
+#ball tree is the best
 db = DBSCAN(eps=epsilon,algorithm='ball_tree', min_samples=min_samples, n_jobs = -1).fit(X)
 #array false for core samples mask
 core_samples_mask = np.zeros_like(db.labels_, dtype=bool)

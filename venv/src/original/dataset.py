@@ -54,7 +54,7 @@ projected = TSNE(n_components=2, verbose=0, perplexity=40, n_iter=300).fit_trans
 # plt.show()
 # caculatation distance of n points
 #https://towardsdatascience.com/machine-learning-clustering-dbscan-determine-the-optimal-value-for-epsilon-eps-python-example-3100091cfbc
-neigh = NearestNeighbors(n_neighbors=1000)
+neigh = NearestNeighbors(n_neighbors=10)
 nbrs = neigh.fit(X)
 distances, indices = nbrs.kneighbors(X)
 print(distances,indices)
