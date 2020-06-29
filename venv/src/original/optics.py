@@ -25,7 +25,7 @@ X = StandardScaler().fit_transform(X)
 
 #handle optics algorithm
 op_time = time.time()
-clust = OPTICS(min_samples=50, xi=.05, min_cluster_size=.05, algorithm="kd_tree",n_jobs=-1).fit(X)
+clust = OPTICS(min_samples=10, xi=.05, min_cluster_size=.05, algorithm="kd_tree",n_jobs=-1).fit(X)
 space = np.arange(len(X))
 reachability = clust.reachability_[clust.ordering_]
 labels = clust.labels_[clust.ordering_]

@@ -16,41 +16,46 @@
 #
 
 """
-An example demonstrating PowerIterationClustering.
+An example demonstrating k-means clustering.
 Run with:
-  bin/spark-submit examples/src/main/python/ml/power_iteration_clustering_example.py
+  bin/spark-submit examples/src/main/python/ml/kmeans_example.py
+
+This example requires NumPy (http://www.numpy.org/).
 """
-# $example on$
-from pyspark.ml.clustering import PowerIterationClustering
-# $example off$
-from pyspark.sql import SparkSession
-
-
+from __future__ import print_function
 import numpy as np
 import time
 import datetime
 
 from hdbscan import HDBSCAN
 from sklearn.cluster import DBSCAN
+
+from sklearn import metrics
 from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
-from sklearn import metrics
 from sklearn.decomposition import PCA
 #make the random number is same every each run
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from scipy.spatial import distance
-np.random.seed(0)
+import csv
+
+# $example on$
+from pyspark.ml.clustering import KMeans
+from pyspark.ml.evaluation import ClusteringEvaluator
+# $example off$
+
+from pyspark.sql import SparkSession
+from pyspark import SparkContext, SparkConf
 if __name__ == "__main__":
-    spark = SparkSession\
-        .builder\
-        .appName("Hdbscann")\
-        .getOrCreate()
+    conf =  SparkConf().setAppName("HDBScanExample").set
 
+    sc = SparkContext(conf=conf)
 
-    n_points_per_cluster_total = 2000000
-    print("total points: " + str(n_points_per_cluster_total))
+    n_points_per_cluster_total = 500000
+    print("total points")
+    print(n_points_per_cluster_total)
 
     size_colum = 100
     centers = np.random.randint(-100, 100, size=(size_colum, size_colum))
@@ -60,12 +65,13 @@ if __name__ == "__main__":
                                 n_features=size_colum, cluster_std=0.4,
                                 random_state=0)
     X = StandardScaler().fit_transform(X)
-    print("X.shape: " + str(X.shape))
-    # #############################################################################
+    # read data with method 1, Parallelized Collections
+    #https://spark.apache.org/docs/latest/rdd-programming-guide.html
+    distData = sc.parallelize(X)
+    collectedData = np.array(distData.collect())
     # Compute HDBSCAN
     hdb_t1 = time.time()
-    min_cluster_size  = 10
-    print("min_cluster_size : " + str(min_cluster_size))
+    min_cluster_size = 10
     hdb = HDBSCAN(min_cluster_size=min_cluster_size, algorithm='boruvka_kdtree', core_dist_n_jobs=-1, ).fit(X)
     hdb_labels = hdb.labels_
     hdb_elapsed_time = time.time() - hdb_t1
@@ -76,4 +82,5 @@ if __name__ == "__main__":
     print('Len of Cluster are : ', len(X))
     print('Estimated number of clusters: %d' % n_clusters_hdb_)
     print('Elapsed time to cluster: %.4f s' % hdb_elapsed_time)
-    spark.stop()
+
+    sc.stop()

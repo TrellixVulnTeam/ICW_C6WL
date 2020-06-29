@@ -15,7 +15,7 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 # Create data sample for algorithmus
 np.random.seed(0)
-n_points_per_cluster_total = 10000
+n_points_per_cluster_total = 50000
 size_colum = 100
 centers = np.random.randint(-100, 100, size=(size_colum,size_colum))
 

@@ -47,10 +47,10 @@ from pyspark.ml.evaluation import ClusteringEvaluator
 from pyspark.sql import SparkSession
 from pyspark import SparkContext, SparkConf
 if __name__ == "__main__":
-    conf = SparkConf().setAppName("KMeansExample")
+    conf = SparkConf().setAppName("DBscanExample")
     sc = SparkContext(conf=conf)
 
-    n_points_per_cluster_total = 100000
+    n_points_per_cluster_total = 400000
     print("total points")
     print(n_points_per_cluster_total)
 
@@ -65,6 +65,7 @@ if __name__ == "__main__":
     # read data with method 1, Parallelized Collections
     #https://spark.apache.org/docs/latest/rdd-programming-guide.html
     distData = sc.parallelize(X)
+    collectedData = np.array(distData.collect())
     # Compute DBSCAN
     db_time = time.time()
     epsilon = 12
@@ -73,7 +74,7 @@ if __name__ == "__main__":
     min_samples = 10
     print("min_samples")
     print(min_samples)
-    db = DBSCAN(eps=epsilon, algorithm='ball_tree', min_samples=min_samples, n_jobs=-1).fit(X)
+    db = DBSCAN(eps=epsilon, algorithm='ball_tree', min_samples=min_samples, n_jobs=-1).fit(collectedData)
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     # set for db.core sample indices as true
     core_samples_mask[db.core_sample_indices_] = True

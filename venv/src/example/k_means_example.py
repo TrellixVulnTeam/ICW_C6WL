@@ -32,9 +32,9 @@ if __name__ == "__main__":
 
     # $example on$
     # Load and parse the data
-    data = sc.textFile("data/mllib/kmeans_data.txt")
+    data = sc.textFile("venv/src/data/kmeans_data.txt")
     parsedData = data.map(lambda line: array([float(x) for x in line.split(' ')]))
-    print (parsedData)
+
 
     # Build the model (cluster the data)
     clusters = KMeans.train(parsedData, 2, maxIterations=10, initializationMode="random")
@@ -48,8 +48,9 @@ if __name__ == "__main__":
     print("Within Set Sum of Squared Error = " + str(WSSSE))
 
     # Save and load model
-    clusters.save(sc, "target/org/apache/spark/PythonKMeansExample/KMeansModel")
-    sameModel = KMeansModel.load(sc, "target/org/apache/spark/PythonKMeansExample/KMeansModel")
+    #clusters.save(sc, "target/org/apache/spark/PythonKMeansExample/KMeansModel")
+    #sameModel = KMeansModel.load(sc, "target/org/apache/spark/PythonKMeansExample/KMeansModel")
     # $example off$
-
+    print('data is :')
+    print(parsedData)
     sc.stop()
