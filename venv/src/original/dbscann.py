@@ -18,7 +18,7 @@ import Tree as tree
 np.random.seed(0)
 # #############################################################################
 # Generate sample data
-n_points_per_cluster_total = 1000
+n_points_per_cluster_total = 2000000
 print("total points")
 print(n_points_per_cluster_total)
 
