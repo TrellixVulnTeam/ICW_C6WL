@@ -13,9 +13,11 @@ from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
+#library for paralle processing because n_job = -1 do not work
+#from mpi4py import MPI
 # Create data sample for algorithmus
 np.random.seed(0)
-n_points_per_cluster_total = 10000
+n_points_per_cluster_total = 500000
 size_colum = 100
 centers = np.random.randint(-100, 100, size=(size_colum,size_colum))
 
@@ -25,7 +27,7 @@ X = StandardScaler().fit_transform(X)
 
 #handle optics algorithm
 op_time = time.time()
-clust = OPTICS(min_samples=10, xi=.05, min_cluster_size=.05, algorithm="kd_tree",n_jobs=-1).fit(X)
+clust = OPTICS(min_samples=50, xi=.05, min_cluster_size=.05, algorithm="kd_tree", n_jobs=-1).fit(X)
 space = np.arange(len(X))
 reachability = clust.reachability_[clust.ordering_]
 labels = clust.labels_[clust.ordering_]
@@ -42,30 +44,30 @@ print('Elapsed time to cluster in Optics :  %.4f s ' % op_time_processing)
 #pca = PCA(3)
 #data_set_then = pca.fit_transform(X)
 
-# data_set_then = TSNE(n_components=3).fit_transform(X)
-#
-# fig = plt.figure()
-# ax = plt.axes(projection='3d')
-#
-# colors = ['g.', 'r.', 'b.', 'y.', 'c.', '.o', 'v.']
-# for klass, color in zip(range(0, 5), colors):
-#     Xk = data_set_then[clust.labels_ == klass]
-#     # old ax.plot3D(Xk[:, 0], Xk[:, 1],Xk[:, 2], color, alpha=0.3)
-#
-#     ax.plot3D(data_set_then[clust.labels_ == -1, 0], data_set_then[clust.labels_ == -1, 1],
-#           data_set_then[clust.labels_ == -1, 2], 'k+', alpha=0.3)
-#
-#     #ax.plot(Xk[:, 0], Xk[:, 1], color, alpha=0.3, marker='.')
-#     #ax.plot(X[clust.labels_ == -1, 0], X[clust.labels_ == -1, 1], 'k+', alpha=0.1)
-#
-# #true or false: clust.labels_ == -1
-#
-# plt.xlabel(str(datetime.timedelta(seconds=round(op_time_processing,4), )) + ' s')
-# plt.ylabel('Achse Y')
-# plt.title('Number of clusters: %d' % n_clusters_op_ +
-#             "\n The total point are: %d" % n_points_per_cluster_total +
-#             "\n Size of colum is %d" % size_colum )
-# plt.grid(True)
-# plt.savefig('praxis/optics_%d'%n_points_per_cluster_total+'.png')
-# plt.tight_layout()
-# plt.show()
+data_set_then = TSNE(n_components=3).fit_transform(X)
+
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+
+colors = ['g.', 'r.', 'b.', 'y.', 'c.', '.o', 'v.']
+for klass, color in zip(range(0, 5), colors):
+    Xk = data_set_then[clust.labels_ == klass]
+    # old ax.plot3D(Xk[:, 0], Xk[:, 1],Xk[:, 2], color, alpha=0.3)
+
+    ax.plot3D(data_set_then[clust.labels_ == -1, 0], data_set_then[clust.labels_ == -1, 1],
+          data_set_then[clust.labels_ == -1, 2], 'k+', alpha=0.3)
+
+    #ax.plot(Xk[:, 0], Xk[:, 1], color, alpha=0.3, marker='.')
+    #ax.plot(X[clust.labels_ == -1, 0], X[clust.labels_ == -1, 1], 'k+', alpha=0.1)
+
+#true or false: clust.labels_ == -1
+
+plt.xlabel(str(datetime.timedelta(seconds=round(op_time_processing,4), )) + ' s')
+plt.ylabel('Achse Y')
+plt.title('Number of clusters: %d' % n_clusters_op_ +
+            "\n The total point are: %d" % n_points_per_cluster_total +
+            "\n Size of colum is %d" % size_colum )
+plt.grid(True)
+plt.savefig('praxis/optics_%d'%n_points_per_cluster_total+'.png')
+plt.tight_layout()
+plt.show()

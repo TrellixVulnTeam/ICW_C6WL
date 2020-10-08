@@ -14,11 +14,11 @@ from sklearn.decomposition import PCA
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from scipy.spatial import distance
-import Tree as tree
+#from rtree import index
 np.random.seed(0)
 # #############################################################################
 # Generate sample data
-n_points_per_cluster_total = 2000000
+n_points_per_cluster_total = 10000
 print("total points")
 print(n_points_per_cluster_total)
 
@@ -33,16 +33,23 @@ X = StandardScaler().fit_transform(X)
 print(X)
 
 # #############################################################################
+# Indexing  dataset make_blobs
+# idx = index.Index()
+# left, bottom, right, top = (-5, -5, 5, 5)
+# X = idx.insert(X, (left, bottom, right, top))
+# print(X)
+
+# #############################################################################
 # Compute DBSCAN
 db_time = time.time()
-epsilon  = 13
+epsilon  = 6
 print("epsilon")
 print( epsilon)
 min_samples = 10
 print("min_samples")
 print( min_samples)
 #ball tree is the best
-db = DBSCAN(eps=epsilon,algorithm='ball_tree', min_samples=min_samples, n_jobs = -1).fit(X)
+db = DBSCAN(eps=epsilon,algorithm='ball_tree',leaf_size=10, min_samples=min_samples, n_jobs = -1).fit(X)
 #array false for core samples mask
 core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
 #set for db.core sample indices as true

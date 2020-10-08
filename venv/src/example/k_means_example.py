@@ -49,8 +49,7 @@ if __name__ == "__main__":
 
     # Save and load model
     #clusters.save(sc, "target/org/apache/spark/PythonKMeansExample/KMeansModel")
-    #sameModel = KMeansModel.load(sc, "target/org/apache/spark/PythonKMeansExample/KMeansModel")
+    clusters.save(sc, "target/org/apache/spark/PythonKMeansExample/KMeansModel")
+    sameModel = KMeansModel.load(sc, "target/org/apache/spark/PythonKMeansExample/KMeansModel")
     # $example off$
-    print('data is :')
-    print(parsedData)
     sc.stop()
