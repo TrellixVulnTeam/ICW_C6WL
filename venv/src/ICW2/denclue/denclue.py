@@ -242,7 +242,7 @@ def generate_dataset(n_points_per_cluster_total=100000, size_colum=100):
 
 
 X = generate_dataset()
-
+print(X)
 db_time = time.time()
 den1 = DENCLUE(eps=2, min_density=10).fit(X)
 db_time_process = time.time() - db_time
