@@ -1,3 +1,4 @@
+#https://www.datatechnotes.com/2019/09/clustering-example-with-birch-method-in.html
 from sklearn.cluster import Birch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,9 +19,9 @@ np.random.seed(0)
 # # plt.show()
 
 # van tinh from icw1
-n_points_per_cluster_total = 100000
+n_points_per_cluster_total = 10000
 size_colum = 100
-centers = np.random.randint(-1000, 1000, size=(size_colum,size_colum))
+centers = np.random.randint(-100, 100, size=(size_colum,size_colum))
 
 x, labels_true = make_blobs(n_samples=n_points_per_cluster_total,centers=centers, n_features=size_colum, cluster_std=0.4, random_state=0)
 print(x.shape)
@@ -34,5 +35,6 @@ labels = bclust.predict(x)
 
 db_time_process = time.time() - db_time
 print('Elapsed time to cluster in DBSCANN :  %.4f s ' % db_time_process)
+print(len(labels))
 plt.scatter(x[:,0], x[:,1], c=labels)
 plt.show()
