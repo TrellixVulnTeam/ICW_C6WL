@@ -1,10 +1,13 @@
 # https://scikit-learn.org/stable/modules/generated/sklearn.cluster.MiniBatchKMeans.html#sklearn.cluster.MiniBatchKMeans
+## very okie
 from sklearn.cluster import MiniBatchKMeans
 import numpy as np
 # for data set
 from sklearn.datasets.samples_generator import make_blobs
 #time measure
 import time
+import matplotlib.pyplot as plt
+
 # X = np.array([[1, 2], [1, 4], [1, 0],
 #               [4, 2], [4, 0], [4, 4],
 #               [4, 5], [0, 1], [2, 2],
@@ -22,7 +25,7 @@ import time
 # kmeans.predict([[0, 0], [4, 4]])
 #
 # # fit on the whole data
-n_points_per_cluster_total = 1000000
+n_points_per_cluster_total = 1000
 size_colum = 100
 centers = np.random.randint(-1000, 1000, size=(size_colum,size_colum))
 
@@ -31,7 +34,7 @@ print(X.shape)
 
 db_time = time.time()
 
-kmeans = MiniBatchKMeans(n_clusters=102,
+kmeans = MiniBatchKMeans(n_clusters=3,
 random_state = 0,
 batch_size = 300,
 max_iter = 100).fit(X)
@@ -41,6 +44,6 @@ print('Elapsed time to cluster in MInibatch kmeans :  %.4f s ' % db_time_process
 
 cluster = kmeans.cluster_centers_
 labels = kmeans.labels_
-print(labels)
 print(len(cluster))
-#
+plt.scatter(X[:,0], X[:,2], c=labels)
+plt.show()
