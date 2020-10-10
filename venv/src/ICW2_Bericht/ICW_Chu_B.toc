@@ -1,0 +1,19 @@
+\babel@toc {ngerman}{}
+\contentsline {section}{Abbildungsverzeichnis}{1}{section*.2}%
+\contentsline {section}{Tabellenverzeichnis}{1}{section*.3}%
+\contentsline {paragraph}{Abstrakt}{2}{section*.4}%
+\contentsline {paragraph}{Keywords:}{2}{section*.5}%
+\contentsline {section}{\numberline {1}Einleitung}{2}{section.1}%
+\contentsline {section}{\numberline {2}eine Umfrage der Clustering für große Datenmenge}{2}{section.2}%
+\contentsline {paragraph}{Clustering - Algorithment - Kategorien}{2}{section*.6}%
+\contentsline {section}{\numberline {3}5 häufigste Algorithmen für Clustering in Machine Learning}{3}{section.3}%
+\contentsline {section}{\numberline {4}K-Means Clustering}{3}{section.4}%
+\contentsline {section}{\numberline {5}Minibatch kmean}{3}{section.5}%
+\contentsline {section}{\numberline {6}ALl Sklearn}{3}{section.6}%
+\contentsline {section}{\numberline {7}FUZZY-CMEANS (FCM) und EM }{3}{section.7}%
+\contentsline {section}{\numberline {8}OptiGrid}{3}{section.8}%
+\contentsline {section}{\numberline {9}B. BIRCH}{3}{section.9}%
+\contentsline {section}{\numberline {10}C. DENCLUE}{3}{section.10}%
+\contentsline {section}{\numberline {11}EXPECTATION-MAXIMIZATION (EM)}{3}{section.11}%
+\contentsline {section}{\numberline {12}Zusammenfassung}{3}{section.12}%
+\contentsline {section}{Literatur}{4}{section*.7}%

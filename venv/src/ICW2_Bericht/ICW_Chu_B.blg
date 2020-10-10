@@ -1,0 +1,62 @@
+This is BibTeX, Version 0.99d (TeX Live 2020)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: ICW_Chu_B.aux
+The style file: unsrt.bst
+Database file #1: sample.bib
+You're missing a field name---line 2 of file sample.bib
+ : 
+ : %  author =       "Albert Einstein",
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You're missing a field name---line 14 of file sample.bib
+ : 
+ : %    author    = "Michel Goossens and Frank Mittelbach and Alexander Samarin",
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You're missing a field name---line 22 of file sample.bib
+ : 
+ : %    author    = "Donald Knuth",
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You've used 1 entry,
+            1791 wiz_defined-function locations,
+            451 strings with 3793 characters,
+and the built_in function-call counts, 328 in all, are:
+= -- 21
+> -- 26
+< -- 0
++ -- 9
+- -- 8
+* -- 33
+:= -- 63
+add.period$ -- 3
+call.type$ -- 1
+change.case$ -- 1
+chr.to.int$ -- 0
+cite$ -- 1
+duplicate$ -- 9
+empty$ -- 25
+format.name$ -- 8
+if$ -- 65
+int.to.chr$ -- 0
+int.to.str$ -- 1
+missing$ -- 1
+newline$ -- 8
+num.names$ -- 1
+pop$ -- 1
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 3
+stack$ -- 0
+substring$ -- 21
+swap$ -- 1
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 2
+width$ -- 2
+write$ -- 13
+(There were 3 error messages)
